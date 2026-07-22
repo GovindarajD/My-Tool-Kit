@@ -1,0 +1,81 @@
+{
+  "proto_name": "CTScannerConsole",
+  "default_name": "ct_scanner_console",
+  "chassis": {
+    "parts": [
+      {
+        "name": "desk_base",
+        "shape": "box",
+        "size": [0.6, 1.2, 0.75],
+        "translation": [0, 0, 0.375],
+        "color": [0.82, 0.82, 0.85],
+        "roughness": 0.5
+      },
+      {
+        "name": "control_panel",
+        "shape": "box",
+        "size": [0.35, 1.0, 0.12],
+        "translation": [0.28, 0, 0.81],
+        "rotation": [0, 1, 0, 0.35],
+        "color": [0.78, 0.78, 0.82],
+        "roughness": 0.4
+      }
+    ]
+  },
+  "knobs": [
+    {
+      "name": "window_width_knob",
+      "anchor": [0.32, -0.35, 0.86],
+      "axis": [0, 0, 1],
+      "radius": 0.018,
+      "height": 0.025,
+      "color": [0.15, 0.15, 0.17]
+    },
+    {
+      "name": "window_level_knob",
+      "anchor": [0.32, -0.20, 0.86],
+      "axis": [0, 0, 1],
+      "radius": 0.018,
+      "height": 0.025,
+      "color": [0.15, 0.15, 0.17]
+    },
+    {
+      "name": "table_height_knob",
+      "anchor": [0.32, -0.05, 0.86],
+      "axis": [0, 0, 1],
+      "radius": 0.018,
+      "height": 0.025,
+      "color": [0.2, 0.3, 0.5]
+    }
+  ],
+  "buttons": [
+    {
+      "name": "scan_start_button",
+      "anchor": [0.32, 0.15, 0.86],
+      "axis": [0, 0, -1],
+      "max_travel": 0.008,
+      "radius": 0.02,
+      "height": 0.012,
+      "color": [0.1, 0.75, 0.15]
+    },
+    {
+      "name": "emergency_stop_button",
+      "anchor": [0.32, 0.30, 0.86],
+      "axis": [0, 0, -1],
+      "max_travel": 0.006,
+      "radius": 0.022,
+      "height": 0.014,
+      "color": [0.85, 0.05, 0.05]
+    }
+  ],
+  "screen": {
+    "name": "touch_display",
+    "translation": [0.20, 0.42, 0.95],
+    "rotation": [0, 1, 0, 0.35],
+    "width_m": 0.32,
+    "height_m": 0.22,
+    "pixel_width": 480,
+    "pixel_height": 320,
+    "with_touch_sensor": true
+  }
+}
