@@ -413,8 +413,22 @@ function callClaudeCli(oauthToken, prompt, model) {
         if (model) {
             args.push('--model', model);
         }
+        // Some environments set cert-path env vars globally. If they point to
+        // missing files, Node-based CLIs emit startup TLS warnings and can fail.
+        // Drop only broken paths for the child process; keep valid custom certs.
+        const childEnv = {
+            ...process.env,
+            CLAUDE_CODE_OAUTH_TOKEN: oauthToken,
+        };
+        for (const key of ['NODE_EXTRA_CA_CERTS', 'SSL_CERT_FILE']) {
+            const certPath = childEnv[key];
+            if (certPath && !fs.existsSync(certPath)) {
+                delete childEnv[key];
+                _output?.appendLine(`[chat] claude-cli: ignoring invalid ${key} path: ${certPath}`);
+            }
+        }
         const child = childProcess.spawn('claude', args, {
-            env: { ...process.env, CLAUDE_CODE_OAUTH_TOKEN: oauthToken },
+            env: childEnv,
             shell: process.platform === 'win32',
         });
         let stdout = '';
@@ -427,7 +441,13 @@ function callClaudeCli(oauthToken, prompt, model) {
         });
         child.on('close', (code) => {
             if (code !== 0) {
-                reject(new Error(`claude CLI exited with code ${code}: ${stderr || '(no stderr)'}`));
+                const stdErr = stderr.trim();
+                const stdOut = stdout.trim();
+                const details = [
+                    stdErr ? `stderr: ${stdErr}` : 'stderr: (empty)',
+                    stdOut ? `stdout: ${stdOut.slice(0, 1000)}` : 'stdout: (empty)',
+                ].join('; ');
+                reject(new Error(`claude CLI exited with code ${code}: ${details}`));
                 return;
             }
             try {
